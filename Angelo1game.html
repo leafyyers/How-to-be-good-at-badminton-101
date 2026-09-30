@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Word Search Game</title>
+    <style>
+        /* Base page styling */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Still Time', Helvetica, sans-serif;
+            background-image: url("img/one.jpg");
+            display: flex;
+            flex-direction: column;
+        }
+        /* Layout Container to center the game box under the navbar */
+        .main-content {
+            display: flex;
+            flex: 1;                     /* Fills all remaining screen space under navbar */
+            justify-content: center;     /* Centers horizontally (Left to Right) */
+            align-items: center;         /* Centers vertically (Top to Bottom) */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        /* Top Navigation Bar Styling */
+        .topnav {
+            overflow: hidden;
+            background-color: #243250;
+        }
+
+        .topnav a {
+            float: left;
+            color: #e6e2e2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            font-family: 'Arial', sans-serif; /* Keeps nav bar readable */
+            font-weight: bold;
+        }
+
+        .topnav a:hover {
+            background-color: #3a648b;
+            color: #fff;
+        }
+
+        .topnav a.active {
+            background-color: #3a648b;
+            color: #fff; /* Pop star pink accent color */
+        }
+
+        .game-container {
+           background-image: url("img/piece.jpg");
+background-position: center;  /* Centers the image horizontally and vertically */
+background-repeat: no-repeat;  /* Prevents the image from tiling/repeating */
+background-size: cover;        /* Scales the image to fill the entire background space */
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            text-align: center;
+            max-width: 580px;
+            width: 100%;
+            font-family: 'Arial', sans-serif; /* Readable UI typeface */
+            box-sizing: border-box;
+        }
+
+        .game-container h1 {
+            font-family: 'Still Time', Helvetica, sans-serif;
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #243250;
+            font-size: 2.5rem;
+        }
+
+        .word-list {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .word-item {
+            font-weight: bold;
+            color: #4a5568;
+            background: #edf2f7;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .word-item.found {
+            text-decoration: line-through;
+            color: #cbd5e0;
+            background: #e2e8f0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 35px);
+            gap: 5px;
+            justify-content: center;
+            margin-bottom: 25px;
+            user-select: none;
+        }
+
+        .cell {
+            width: 35px;
+            height: 35px;
+            background: #edf2f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .cell.selected {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+
+        .cell.found {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        button {
+            background: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #2b6cb0;
+        }
+           /* Top Navigation Bar Styling */
+        .topnav {
+            overflow: hidden;
+            background-color: #243250;
+            width: 100%;
+        }
+
+        .topnav a {
+            float: left;
+            color: #e6e2e2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            font-family: 'Arial', sans-serif; /* Keeps nav bar readable */
+            font-weight: bold;
+        }
+
+        .topnav a:hover {
+            background-color: #3a648b;
+            color: #fff;
+        }
+
+        .topnav a.active {
+            background-color: #3a648b;
+            color: #fff; 
+        }
+        </style>
+</head>
+<body>
+     <!-- Top Navigation Menu -->
+    <div class="topnav" id="myTopnav">
+        <a class="active" href="wow.html">Coby</a>
+        <a class="" href="" target="_blank">Fortune</a>
+        <a class="active" href="code.html" target="_blank">Elisha</a>
+        <a href="game.html" target="_blank">Games</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div> 
+    </style>
+</head>
+<body>
+    <!-- Centered Body Content Area -->
+    <div class="main-content">
+        <div class="game-container">
+            <h1>Word Search Puzzle</h1>
+            <p style="margin: 0 0 20px 0; font-size: 0.95rem; color: #fa0000;"><strong>(press & hold to highlight the words)</strong></p>
+            <style>
+            p {
+  text-decoration: underline;
+}
+</style>
+            <div id="word-list" class="word-list"></div>
+            <div id="grid" class="grid"></div>
+            <button id="restart-btn">Restart Game</button>
+        </div>
+    </div>
+     <style>
+  button {
+    background-color: #243250;
+    color: #f1f2f3;
+    border: none;
+    border-radius: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: 0.2s;
+  }
+  button:hover {
+    background-color: #332442;
+    transform: scale(1.05);
+  }
+</style>
+<style>
+        body {
+            color: rgb(#243250); /* This changes all text on the page to blue */
+        }
+    </style>
+</head>
+<body>
+  <!-- Change 'https://google.com' to any website you want -->
+  <a href="wow.html">
+  <style>
+        body {
+            color: rgb(#243250); /* This changes all text on the page to blue */
+        }
+    </style>
+</head>
+<body>
+  <!-- Change 'https://google.com' to any website you want -->
+   <a href="Angelo2game.html" target="_blank">
+    <button type="button">Next game</button>
+  </a>
+
+    <!-- JavaScript Game Logic -->
+    <script>
+        const GRID_SIZE = 12;
+        const ORIGINAL_WORDS = ["ONE PIECE", "COMPUTER", "TLE", "COACH", "BADMINTON", "RONALDO", "SEVEN"];
+        
+        // Convert to uppercase and strip whitespace for core tracking
+        const WORDS_TO_FIND = ORIGINAL_WORDS.map(w => w.toUpperCase().replace(/\s+/g, ''));
+        
+        const WORD_DISPLAY_MAP = {};
+        WORDS_TO_FIND.forEach((cleanWord, index) => {
+            WORD_DISPLAY_MAP[cleanWord] = ORIGINAL_WORDS[index].toUpperCase();
+        });
+
+        let grid = [];
+        let isSelecting = false;
+        let startCell = null;
+        let currentSelection = [];
+        let foundWords = new Set();
+
+        function initGame() {
+            foundWords.clear();
+            grid = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(''));
+            
+            placeWords();
+            fillEmptyCells();
+            renderUI();
+        }
+
+        function placeWords() {
+            // Horizontal Right, Vertical Down, Diagonal Down-Right
+            const directions = [[0, 1], [1, 0], [1, 1]];
+
+            WORDS_TO_FIND.forEach(word => {
+                let placed = false;
+                let attempts = 0;
+                
+                while (!placed && attempts < 100) {
+                    const [rd, cd] = directions[Math.floor(Math.random() * directions.length)];
+                    const row = Math.floor(Math.random() * GRID_SIZE);
+                    const col = Math.floor(Math.random() * GRID_SIZE);
+
+                    if (canPlaceWord(word, row, col, rd, cd)) {
+                        for (let i = 0; i < word.length; i++) {
+                            grid[row + i * rd][col + i * cd] = word[i];
+                        }
+                        placed = true;
+                    }
+                    attempts++;
+                }
+            });
+        }
+
+        function canPlaceWord(word, row, col, rd, cd) {
+            for (let i = 0; i < word.length; i++) {
+                const r = row + i * rd;
+                const c = col + i * cd;
+                if (r >= GRID_SIZE || c >= GRID_SIZE || (grid[r][c] !== '' && grid[r][c] !== word[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function fillEmptyCells() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    if (grid[r][c] === '') {
+                        grid[r][c] = letters[Math.floor(Math.random() * letters.length)];
+                    }
+                }
+            }
+        }
+
+        function renderUI() {
+            const listElement = document.getElementById('word-list');
+            listElement.innerHTML = WORDS_TO_FIND.map(w => 
+                `<span class="word-item" id="word-${w}">${WORD_DISPLAY_MAP[w]}</span>`
+            ).join('');
+
+            const gridElement = document.getElementById('grid');
+            gridElement.innerHTML = '';
+            
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.innerText = grid[r][c];
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+
+                    cell.addEventListener('mousedown', () => startSelect(r, c, cell));
+                    cell.addEventListener('mouseenter', () => trackSelect(r, c, cell));
+                    
+                    gridElement.appendChild(cell);
+                }
+            }
+        }
+
+        function startSelect(r, c, cell) {
+            isSelecting = true;
+            startCell = { r, c };
+            currentSelection = [{ r, c, cell }];
+            cell.classList.add('selected');
+        }
+
+        function trackSelect(r, c, cell) {
+            if (!isSelecting) return;
+            
+            // Linear restriction check
+            if (r === startCell.r || c === startCell.c || Math.abs(r - startCell.r) === Math.abs(c - startCell.c)) {
+                if (!currentSelection.some(item => item.r === r && item.c === c)) {
+                    currentSelection.push({ r, c, cell });
+                    cell.classList.add('selected');
+                }
+            }
+        }
+
+        function endSelect() {
+            if (!isSelecting) return;
+            isSelecting = false;
+
+            const selectedWord = currentSelection.map(item => grid[item.r][item.c]).join('');
+            const reversedWord = selectedWord.split('').reverse().join('');
+
+            let match = WORDS_TO_FIND.find(w => w === selectedWord || w === reversedWord);
+
+            if (match && !foundWords.has(match)) {
+                foundWords.add(match);
+                document.getElementById(`word-${match}`).classList.add('found');
+                currentSelection.forEach(item => item.cell.classList.add('found'));
+                
+                if (foundWords.size === WORDS_TO_FIND.length) {
+                    setTimeout(() => alert("Congratulations! You found all the words! 🌟"), 200);
+                }
+            }
+            document.querySelectorAll('.cell.selected').forEach(c => c.classList.remove('selected'));currentSelection = [];}window.addEventListener('mouseup', endSelect);document.getElementById('restart-btn').addEventListener('click', initGame);initGame();
+    </script>
+</body>
+</html>

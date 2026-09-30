@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday</title>
+    <link rel="icon" type="img/jpg" href="img/lindan.jpg">
+
+    <style>
+
+
+        /* Base page styling */
+        body, html {
+            height: 100%;
+            margin: 0;
+            /* 2. QUOTATION MARKS ADDED TO FONT NAME */
+            font-family: 'Still Time', Helvetica, sans-serif;
+            background-color: #335979;
+        }
+
+        /* Top Navigation Bar Styling */
+        .topnav {
+            overflow: hidden;
+            background-color: #243250;
+        }
+
+        .topnav a {
+            float: left;
+            color: #e6e2e2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            font-family: 'Arial', sans-serif; /* Keeps nav bar readable */
+            font-weight: bold;
+        }
+
+        .topnav a:hover {
+            background-color: #3a648b;
+            color: #fff;
+        }
+
+        .topnav a.active {
+            background-color: #3a648b;
+            color: #fff; /* Pop star pink accent color */
+        }
+        .terminal {
+            max-width: 700px;
+            margin: 30px auto;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            text-align: center;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(88, 166, 255, 0.15);
+        }
+
+
+        .terminal-top {
+            background: #21262d;
+            padding: 10px 15px;
+            color: #8b949e;
+        }
+
+
+        .terminal-content {
+            padding: 25px;
+            line-height: 1.8;
+        }
+ .message {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 50px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 15px;
+        }
+
+        /* Hero Image Layout */
+        .hero-image {
+            background-image: linear-gradient(rgba(245, 244, 244, 0), rgba(0, 0, 0, 0.5)), url("img/coach.jpg");
+            height: 90vh; /* Controlled height so text fits below it */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+
+        .hero-text {
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* Paragraph styling with Integrated Typing Effect */
+        .birthday-message {
+            text-align: left
+            ; /* Switched to left for a natural typewriter feel */
+            color: #f4f4f5; 
+            font-size: 20px; 
+            padding: 70px 50px;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.5;
+            font-family: 'Courier New', Courier, monospace; /* Ideal font for a real computer typing look */
+            
+            /* Typing logic for long block paragraphs */
+            overflow: hidden; 
+            border-right: 3px solid #663b83; /* The blinking typing cursor */
+            white-space: pre-wrap; /* Preserves your line breaks (<br>) while typing out */
+            width: 0;
+            
+            /* Animates typing out for 8 seconds, then pauses the cursor blinking after 9.5 seconds */
+            animation: 
+                typingOut 25s steps(160, end) forwards,
+                cursorBlink 0.75s step-end infinite;
+        }
+
+        .birthday-message strong::first-line {
+            font-family: 'Courier New', sans-serif; /* Makes title line use Gaga font */
+            font-size: 40px;
+            color: #b28fdb;
+        }
+
+        /* KEYFRAMES FOR THE TYPING MOTION EFFECT */
+        @keyframes typingOut {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes cursorBlink {
+            from, to { border-color: transparent; }
+            50% { border-color: #c46bad; }
+        }
+        
+        
+    </style>
+</head>
+<body>
+ 
+    <!-- Splash Screen overlay -->
+   <div id="splash" style="position:fixed; top:0; left:0; width:100%; height:100%; background: url('img/badminton.jpg') no-repeat center/cover; color:#3e3841; display:flex; justify-content:center; align-items:center; z-index:9999;">
+    <button onclick="startWebsite()" style="padding:15px 30px; font-size:20px; cursor:pointer; background:#b33a80; color:white; border:none; border-radius:5px;">Enter</button>
+</div>
+
+    <!-- Audio File -->
+    <audio id="bgMusic" src="music/boogie.mp3" loop></audio>
+
+    <!-- Top Navigation Menu -->
+    <div class="topnav" id="myTopnav">
+        <a class="active" href="wow.html">Coby</a>
+        <a class="" href="fortune.html">Fortune</a>
+        <a class="active" href="code.html" target="_blank">Elisha</a>
+        <a href="Angelo1game.html" target="_blank">Games</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div> 
+
+    <!-- 2. Header Title Section -->
+    <div style="padding-left:16px; color: white;">
+        <h2></h2>
+        <hr>
+    </div>
+    <!-- 3. Giant Hero Image Welcome Showcase -->
+    <div class="hero-image">
+        <div class="hero-text">
+            <!-- Dynamic greeting layer added here -->
+            <h3 style="font-size:26px; margin-bottom: 0; color: #dfc9f1;">
+                 🎉 Hello, <span id="user-name">wow</span>!
+            </h3>
+            <h1 style="font-size:50px; margin-top: 10px;">Happy Teacher's Day!</h1>
+            <h3>(scroll down to see the letter 😊)</h3>
+
+        </div>
+    </div>
+    
+    <!-- 5. All JavaScript Handlers -->
+    <script>
+        // Toggle mobile responsive navigation bar styles
+        function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+
+        // Extract user data from the sign-up page URL and inject it into the welcome greeting
+        const urlParams = new URLSearchParams(window.location.search);
+        const user = urlParams.get('user');
+
+        if (user) {
+            document.getElementById('user-name').textContent = user;
+        }
+    </script>
+<section class="message">
+    <!-- Heartfelt Birthday Message Block -->
+    <p class="birthday-message"><strong>Dear Coach/Sir Angelo,</strong><br>
+           <strong>Thank you for being my best teacher, not only teaching at school but also as my coach in my sport. As my TLE and Computer teacher, I had learned so many new things about codings. I am actually enjoyinglearning codings or programmings topics. Whenever its your next subject, I always get excited because I know
+that I'll have to learn new coding things.
+<br>
+ Actually, I'm already learning about python already, even though its not
+our topic, hahaha. But these new lessons about computer led me as my new hobby and journey throughout my life.<br><br>
+Thank you also for supporting my Justin Bieber fangirl side, hahaha. Besides you're teaching at school, I really learned
+new things or lessons in badminton also. That brought me to new journeys, like meeting new friends or someone who had a same
+sport as me, and giving a shot to try and practice more while my body's already exhausted or tired. You always make students
+or people happy, they can enjoy your joyful jokes or anything. Especially that you're the adviser of grade 8-Apo, which is my old section when I was in 8th grade.<br>Once again, happy teacher's day, coach/sir Angelo!<br><br><br>
+            -Jose, Coby</p>
+             <!-- JavaScript Controls -->
+    <script>
+    function startWebsite() {
+        const audio = document.getElementById("bgMusic");
+        audio.play()
+            .then(() => {
+                document.getElementById("splash").style.display = "none";
+            })
+            .catch((error) => {
+                alert("Audio failed to play! Reason: " + error.message + 
+                      "\n\nPlease check that your 'music/boogie.mp3' file path is correct.");
+            });
+    }
+    </script>
+    </section>
+
+</body>
+</html>

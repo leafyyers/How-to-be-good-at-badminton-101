@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message For You</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url("img/wow.jpg");
+			background-repeat: no-repeat;
+            background-position: center;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+        }
+        nav {
+  position: -webkit-sticky; /* Support for older Safari browsers */
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Keeps it on top of other content */
+}
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; 
+}
+        /* Top Navigation Bar Styling */
+        .topnav {
+            overflow: hidden;
+            background-color: #243250;
+        }
+
+        .topnav a {
+            float: left;
+            color: #e6e2e2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            font-family: 'Arial', sans-serif; /* Keeps nav bar readable */
+            font-weight: bold;
+        }
+
+        .topnav a:hover {
+            background-color: #3a648b;
+            color: #fff;
+        }
+
+        .topnav a.active {
+            background-color: #3a648b;
+            color: #fff; /* Pop star pink accent color */
+        }
+
+        /* The main wrapper that scales gracefully */
+        .wrapper {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            perspective: 1000px;
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+
+        /* When opened, the container grows larger to fit paragraphs comfortably */
+        .wrapper.open {
+            width: 450px;
+            height: 500px;
+            max-width: 90vw;
+            max-height: 80vh;
+        }
+
+        /* The hidden message letter */
+        .letter-scroll {
+            position: absolute;
+            inset: 10px;
+            background: #fdfbf7; /* Warm paper color */
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            padding: 30px 25px;
+            box-sizing: border-box;
+            color: #2c3e50;
+            font-size: 16px;
+            line-height: 1.6;
+            z-index: 1;
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.4s ease;
+            /* Crucial part: clean scrolling behavior for long text */
+            overflow-y: auto;
+            white-space: pre-wrap; /* Keeps your paragraph line breaks intact */
+        }
+
+        /* Custom scrollbar styling for a polished look */
+        .letter-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .letter-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        /* The envelope cover hiding the letter */
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #6366f1, #4f46e5); /* Indigo gradient */
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            z-index: 2;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .envelope:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+        }
+
+        .envelope .icon {
+            font-size: 50px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* State updates when clicked */
+        .wrapper.open .envelope {
+            transform: scale(0.5) translateY(-100px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .wrapper.open .letter-scroll {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Confetti particle elements */
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            animation: explosion 0.7s ease-out forwards;
+            z-index: 10;
+        }
+
+        @keyframes explosion {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) rotate(360deg) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Menu -->
+    <div class="topnav" id="myTopnav">
+        <a class="active" href="wow.html">Coby</a>
+        <a class="" href="fortune.html">Fortune</a>
+        <a class="active" href="code.html" target="_blank">Elisha</a>
+        <a href="Angelo1game.html" target="_blank">Games</a>
+        </a>
+    </div> 
+ <!-- Splash Screen overlay -->
+   <div id="splash" style="position:fixed; top:0; left:0; width:100%; height:100%; background: url('img/ronaldo1.jpg') no-repeat center/cover; color:#3e3841; display:flex; justify-content:center; align-items:center; z-index:9999;">
+    <button onclick="startWebsite()" style="padding:15px 30px; font-size:20px; cursor:pointer; background:#6b5a0c; color:white; border:none; border-radius:5px;">Enter</button>
+</div>
+
+    <!-- Audio File -->
+    <audio id="bgMusic" src="music/sososicksick.mp3" loop></audio>
+
+<img src="img/sir.jpg" class="left" height="400" alt="wig">
+<style>
+	img {
+		border: 5px solid #2aa3f3;
+	}
+</style>
+    <div class="wrapper" id="suprise-wrapper">
+        <!-- 1. Interactive Cover -->
+        <div class="envelope" id="envelope-trigger">
+            <div class="icon">📚💻🏸🏴‍☠️</div>
+            <p style="margin-top: 10px; font-weight: 600; letter-spacing: 0.5px;">Click to reveal the letter</p>
+        </div>
+
+        <!-- 2. Scrollable Long-Text Letter -->
+        <div class="letter-scroll">
+            <h2 style="margin-top: 0; color: #74bbf5; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Happy teachers day sir!</h2>
+            <p>Hi sirr! Cillo writing here, first of all, I highly appreciate your hard work and dedication on teaching us and being patient with us (kahit maingay na po kami) every meeting natin. <br> Even though maiingay kami and makukulit, just know Bonifacio will always appreciate a teacher like you 🫵🏻, remember that roads can be sometimes rough and handang handa na po kami sa lahat ng pagsusubok na ibibigay mo samin sir (wag lang po blindfold test, no more of that pls).<br> I hope sir you will always miss us (sakto lang sir) and bring laughter and joy to our classroom everytime you step inside our room. <br> Pagbubutihin na po namin ang coding namin and we will be ready sa future lessons natin sa tle and much more moral lessons from you sir. <br> Mahal na mahal ka namin sir, stay healthy, stay happy, God bless you sir!</p>
+            <p style="margin-bottom: 0; font-weight: bold; color: #74bbf5;">Best regards,<br>Cillo🥹</p>
+        </div>
+    </div>
+<script>
+    function startWebsite() {
+        const audio = document.getElementById("bgMusic");
+        audio.play()
+            .then(() => {
+                document.getElementById("splash").style.display = "none";
+            })
+            .catch((error) => {
+                alert("Audio failed to play! Reason: " + error.message + 
+                      "\n\nPlease check that your 'music/sososicksick.mp3' file path is correct.");
+            });
+    }
+        const wrapper = document.getElementById('suprise-wrapper');
+        const trigger = document.getElementById('envelope-trigger');
+
+        trigger.addEventListener('click', (e) => {
+            wrapper.classList.add('open');
+
+            // Get center coordinates for the confetti explosion
+            const rect = trigger.getBoundingClientRect();
+            const cx = rect.left + (rect.width / 2);
+            const cy = rect.top + (rect.height / 2);
+
+            // Pop confetti burst
+            for (let i = 0; i < 50; i++) {
+                spawnParticle(cx, cy);
+            }
+        });
+
+        function spawnParticle(x, y) {
+            const el = document.createElement('div');
+            el.classList.add('confetti');
+            document.body.appendChild(el);
+
+            const palette = ['#6366f1', '#38bdf8', '#4ecdc4', '#ff6b6b', '#ffe66d'];
+            el.style.backgroundColor = palette[Math.floor(Math.random() * palette.length)];
+            
+            // Fixed: Wrapped template strings in backticks
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+
+            // Random angle trajectory and wide spread
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 250 + 60;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+
+            // Fixed: Wrapped template strings in backticks
+            el.style.setProperty('--x', `${tx}px`);
+            el.style.setProperty('--y', `${ty}px`);
+
+            el.addEventListener('animationend', () => el.remove());
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Memory Match</title>
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --background-color: #f7f9fc;
+            --card-back: #ffe66d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url("img/ronaldo.jpg");
+            background-position: center;  /* Centers the image horizontally and vertically */
+background-repeat: no-repeat;  /* Prevents the image from tiling/repeating */
+background-size: cover;        /* Scales the image to fill the entire background space */
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Bar Styling */
+        .topnav {
+            overflow: hidden;
+            background-color: #243250;
+        }
+
+        .topnav a {
+            float: left;
+            color: #e6e2e2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            font-family: 'Arial', sans-serif; /* Keeps nav bar readable */
+            font-weight: bold;
+        }
+
+        .topnav a:hover {
+            background-color: #3a648b;
+            color: #fff;
+        }
+
+        .topnav a.active {
+            background-color: #3a648b;
+            color: #fff; /* Pop star pink accent color */
+        }
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stats {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            width: 90%;
+            perspective: 1000px;
+        }
+
+        .card {
+            aspect-ratio: 1;
+            background-color: transparent;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border-radius: 10px;
+            user-select: none;
+        }
+
+        .card-back {
+            background-color: var(--card-back);
+            border: 3px solid #fff;
+        }
+
+        .card-back::after {
+            content: "🎁";
+            font-size: 2rem;
+        }
+
+        .card-front {
+            background-color: #fff;
+            transform: rotateY(180deg);
+            border: 3px solid var(--secondary-color);
+        }
+
+        .win-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .win-message h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #8445a8;
+        }
+    </style>
+</head>
+<body>
+
+
+    <h1>Teacher's Day Match! 🎂</h1>
+    <div class="stats">Flips: <span id="flip-count">0</span></div>
+
+    <div class="game-container" id="grid"></div>
+
+    <div class="win-message" id="win-screen">
+        <h2>🎉 You Win! 🎉</h2>
+        <p>You completed the grid in <span id="final-flips">0</span> flips.</p>
+        <button class="btn" onclick="resetGame()">Play Again</button>
+        <button class="btn">Back to<a href="Angelo1game.html"></a>
+    </div>
+
+    <script>
+        // Birthday themed emojis (8 pairs = 16 cards)
+        const emojis = ['🎂', '🎈', '🎉', '🎁', '🍰', '🥳', '🧁', '👑'];
+        let cardsArray = [...emojis, ...emojis];
+        
+        let flippedCards = [];
+        let matchedCount = 0;
+        let flips = 0;
+        let isLockBoard = false;
+
+        const grid = document.getElementById('grid');
+        const flipCountSpan = document.getElementById('flip-count');
+        const winScreen = document.getElementById('win-screen');
+        const finalFlipsSpan = document.getElementById('final-flips');
+
+        // Shuffle function (Fisher-Yates)
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize Game Board
+        function createBoard() {
+            grid.innerHTML = '';
+            shuffle(cardsArray);
+            
+            cardsArray.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.emoji = emoji;
+                card.dataset.index = index;
+
+                const back = document.createElement('div');
+                back.classList.add('card-face', 'card-back');
+
+                const front = document.createElement('div');
+                front.classList.add('card-face', 'card-front');
+                front.textContent = emoji;
+
+                card.appendChild(back);
+                card.appendChild(front);
+                card.addEventListener('click', flipCard);
+                grid.appendChild(card);
+            });
+        }
+
+        // Card Flip Logic
+        function flipCard() {
+            if (isLockBoard) return;
+            if (this.classList.contains('flipped')) return;
+            if (flippedCards.length === 1 && this.dataset.index === flippedCards[0].dataset.index) return;
+
+            this.classList.add('flipped');
+            flippedCards.push(this);
+
+            if (flippedCards.length === 2) {
+                flips++;
+                flipCountSpan.textContent = flips;
+                checkMatch();
+            }
+        }
+
+        // Check if the two cards match
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            const isMatch = card1.dataset.emoji === card2.dataset.emoji;
+
+            if (isMatch) {
+                disableCards();
+            } else {
+                unflipCards();
+            }
+        }
+
+        // Lock cards if matched
+        function disableCards() {
+            flippedCards = [];
+            matchedCount += 2;
+
+            if (matchedCount === cardsArray.length) {
+                setTimeout(() => {
+                    finalFlipsSpan.textContent = flips;
+                    winScreen.style.display = 'block';
+                }, 500);
+            }
+        }
+
+        // Unflip cards if not matched
+        function unflipCards() {
+            isLockBoard = true;
+            setTimeout(() => {
+                flippedCards[0].classList.remove('flipped');
+                flippedCards[1].classList.remove('flipped');
+                flippedCards = [];
+                isLockBoard = false;
+            }, 1000);
+        }
+
+        // Reset Game
+        function resetGame() {
+            flippedCards = [];
+            matchedCount = 0;
+            flips = 0;
+            isLockBoard = false;
+            flipCountSpan.textContent = '0';
+            winScreen.style.display = 'none';
+            createBoard();
+        }
+
+        // Start game on load
+        createBoard();
+    </script>
+</body>
+</html>
