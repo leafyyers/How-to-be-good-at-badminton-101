@@ -135,6 +135,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            gap: 20px;
+            text-align: center;
             color: white;
             cursor: pointer;
             z-index: 2;
@@ -156,12 +158,11 @@
         /* Envelope emoji */
         .icon {
             font-size: 50px;
+            line-height: 1;
             animation:
                 floating 2s
                 ease-in-out
                 infinite;
-                text-align: center;
-                width: 100%;
         }
         @keyframes floating {
             0%,
@@ -175,11 +176,10 @@
         .envelope-text {
     margin: 0;
     margin-top: 15px;
-    text-align: center;
-    width: 100%;
     font-size: 16px;
     font-weight: bold;
     letter-spacing: 0.5px;
+    width: fit-content;
 }
         /* =========================================
            LETTER
