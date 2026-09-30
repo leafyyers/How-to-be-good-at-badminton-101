@@ -18,46 +18,42 @@
             overflow: hidden;
         }
         nav {
-  position: -webkit-sticky; /* Support for older Safari browsers */
-  position: sticky;
-  top: 0;
-  z-index: 1000; /* Keeps it on top of other content */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000; 
+
+/* Top Navigation Bar Styling */
+.topnav {
+    display: flex;
+    justify-content: center; /* Centers navbar buttons */
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #243250;
 }
-        /* Top Navigation Bar Styling */
-        .topnav {
-            overflow: hidden;
-            background-color: #243250;
-        }
 
-        .topnav a {
-            float: left;
-            color: #e6e2e2;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            font-size: 17px;
-            font-family: 'Arial', sans-serif; /* Keeps nav bar readable */
-            font-weight: bold;
-        }
+.topnav a {
+    color: #e6e2e2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
 
-        .topnav a:hover {
-            background-color: #3a648b;
-            color: #fff;
-        }
+.topnav a:hover {
+    background-color: #3a648b;
+    color: #fff;
+}
 
-        .topnav a.active {
-            background-color: #3a648b;
-            color: #fff; /* Pop star pink accent color */
-        }
+.topnav a.active {
+    background-color: #3a648b;
+    color: #fff;
+}
         
-
         /* The main wrapper that scales gracefully */
         .wrapper {
             position: relative;
